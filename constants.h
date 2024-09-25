@@ -1,0 +1,4 @@
+int const SCREEN_WIDTH = 64;
+int const SCREEN_HEIGHT = 32;
+int const SCREEN_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT;
+
