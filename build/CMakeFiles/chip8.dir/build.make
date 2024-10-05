@@ -69,31 +69,64 @@ include CMakeFiles/chip8.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/chip8.dir/flags.make
 
-CMakeFiles/chip8.dir/main.cpp.o: CMakeFiles/chip8.dir/flags.make
-CMakeFiles/chip8.dir/main.cpp.o: /Users/zach/CLionProjects/chip8/main.cpp
-CMakeFiles/chip8.dir/main.cpp.o: CMakeFiles/chip8.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/chip8.dir/main.cpp.o"
-	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chip8.dir/main.cpp.o -MF CMakeFiles/chip8.dir/main.cpp.o.d -o CMakeFiles/chip8.dir/main.cpp.o -c /Users/zach/CLionProjects/chip8/main.cpp
+CMakeFiles/chip8.dir/main.c.o: CMakeFiles/chip8.dir/flags.make
+CMakeFiles/chip8.dir/main.c.o: /Users/zach/CLionProjects/chip8/main.c
+CMakeFiles/chip8.dir/main.c.o: CMakeFiles/chip8.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/chip8.dir/main.c.o"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/chip8.dir/main.c.o -MF CMakeFiles/chip8.dir/main.c.o.d -o CMakeFiles/chip8.dir/main.c.o -c /Users/zach/CLionProjects/chip8/main.c
 
-CMakeFiles/chip8.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chip8.dir/main.cpp.i"
-	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/zach/CLionProjects/chip8/main.cpp > CMakeFiles/chip8.dir/main.cpp.i
+CMakeFiles/chip8.dir/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/chip8.dir/main.c.i"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/zach/CLionProjects/chip8/main.c > CMakeFiles/chip8.dir/main.c.i
 
-CMakeFiles/chip8.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chip8.dir/main.cpp.s"
-	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/zach/CLionProjects/chip8/main.cpp -o CMakeFiles/chip8.dir/main.cpp.s
+CMakeFiles/chip8.dir/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/chip8.dir/main.c.s"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/zach/CLionProjects/chip8/main.c -o CMakeFiles/chip8.dir/main.c.s
+
+CMakeFiles/chip8.dir/chip8.c.o: CMakeFiles/chip8.dir/flags.make
+CMakeFiles/chip8.dir/chip8.c.o: /Users/zach/CLionProjects/chip8/chip8.c
+CMakeFiles/chip8.dir/chip8.c.o: CMakeFiles/chip8.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/chip8.dir/chip8.c.o"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/chip8.dir/chip8.c.o -MF CMakeFiles/chip8.dir/chip8.c.o.d -o CMakeFiles/chip8.dir/chip8.c.o -c /Users/zach/CLionProjects/chip8/chip8.c
+
+CMakeFiles/chip8.dir/chip8.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/chip8.dir/chip8.c.i"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/zach/CLionProjects/chip8/chip8.c > CMakeFiles/chip8.dir/chip8.c.i
+
+CMakeFiles/chip8.dir/chip8.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/chip8.dir/chip8.c.s"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/zach/CLionProjects/chip8/chip8.c -o CMakeFiles/chip8.dir/chip8.c.s
+
+CMakeFiles/chip8.dir/constants.c.o: CMakeFiles/chip8.dir/flags.make
+CMakeFiles/chip8.dir/constants.c.o: /Users/zach/CLionProjects/chip8/constants.c
+CMakeFiles/chip8.dir/constants.c.o: CMakeFiles/chip8.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/chip8.dir/constants.c.o"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/chip8.dir/constants.c.o -MF CMakeFiles/chip8.dir/constants.c.o.d -o CMakeFiles/chip8.dir/constants.c.o -c /Users/zach/CLionProjects/chip8/constants.c
+
+CMakeFiles/chip8.dir/constants.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/chip8.dir/constants.c.i"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/zach/CLionProjects/chip8/constants.c > CMakeFiles/chip8.dir/constants.c.i
+
+CMakeFiles/chip8.dir/constants.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/chip8.dir/constants.c.s"
+	/usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/zach/CLionProjects/chip8/constants.c -o CMakeFiles/chip8.dir/constants.c.s
 
 # Object files for target chip8
 chip8_OBJECTS = \
-"CMakeFiles/chip8.dir/main.cpp.o"
+"CMakeFiles/chip8.dir/main.c.o" \
+"CMakeFiles/chip8.dir/chip8.c.o" \
+"CMakeFiles/chip8.dir/constants.c.o"
 
 # External object files for target chip8
 chip8_EXTERNAL_OBJECTS =
 
-chip8: CMakeFiles/chip8.dir/main.cpp.o
+chip8: CMakeFiles/chip8.dir/main.c.o
+chip8: CMakeFiles/chip8.dir/chip8.c.o
+chip8: CMakeFiles/chip8.dir/constants.c.o
 chip8: CMakeFiles/chip8.dir/build.make
+chip8: /usr/local/lib/libSDL3.0.dylib
 chip8: CMakeFiles/chip8.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable chip8"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable chip8"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/chip8.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -59,7 +59,7 @@ void chip8_shr_vx_vy(Chip8* chip8, unsigned char x, unsigned char y);
 void chip8_subn_vx_vy(Chip8* chip8, unsigned char x, unsigned char y);
 void chip8_shl_vx_vy(Chip8* chip8, unsigned char x, unsigned char y);
 void chip8_sne_vx_vy(Chip8* chip8, unsigned char x, unsigned char y);
-void chip8_ld_i_addr(Chip8* chip8, unsigned char I, unsigned short nnn);
+void chip8_ld_i_addr(Chip8* chip8, unsigned short nnn);
 void chip8_jp_v0_addr(Chip8* chip8, unsigned short nnn);
 void chip8_rnd_vx_byte(Chip8* chip8, unsigned char x, unsigned short kk);
 void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsigned char n);

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/zach/CLionProjects/chip8/build",
+  "command": "/usr/bin/clang  -I/Users/zach/CLionProjects/chip8/./SDL/include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -o CMakeFiles/chip8.dir/main.c.o -c /Users/zach/CLionProjects/chip8/main.c",
+  "file": "/Users/zach/CLionProjects/chip8/main.c",
+  "output": "CMakeFiles/chip8.dir/main.c.o"
+}
+]

@@ -5,6 +5,12 @@
 /**
  * http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
  *
+ *
+  memory offsets
+  0x000-0x1FF - Chip 8 interpreter (contains font set in emu)
+  0x050-0x0A0 - Used for the built in 4x5 pixel font set (0-F)
+  0x200-0xFFF - Program ROM and work RAM
+
  * 3.1 - Standard Chip-8 Instructions
             00E0 - CLS
             00EE - RET
@@ -224,9 +230,9 @@ void chip8_sne_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 }
 
 // Annn - LD I, addr
-void chip8_ld_i_addr(Chip8* chip8, unsigned char I, unsigned short nnn)
+void chip8_ld_i_addr(Chip8* chip8, unsigned short nnn)
 {
-    chip8->V[I] = nnn;
+    chip8->V[chip8->I] = nnn;
 }
 
 // Bnnn - JP V0, addr

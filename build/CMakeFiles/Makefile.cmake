@@ -11,6 +11,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.29.4/CMakeCCompiler.cmake"
   "CMakeFiles/3.29.4/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.29.4/CMakeSystem.cmake"
+  "/Users/zach/CLionProjects/chip8/particle.ch8"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/CMakeCInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/CMakeCXXInformation.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
@@ -24,6 +25,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Compiler/Clang.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Compiler/GNU.cmake"
+  "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/FeatureSummary.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/Apple-Clang-C.cmake"
@@ -32,6 +34,13 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/Darwin-Initialize.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/Darwin.cmake"
   "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/Platform/UnixPaths.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3Config.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3ConfigVersion.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3headersTargets.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3sharedTargets-noconfig.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3sharedTargets.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3testTargets-noconfig.cmake"
+  "/usr/local/lib/cmake/SDL3/SDL3testTargets.cmake"
   )
 
 # The corresponding makefile is:
@@ -42,6 +51,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
+  "particle.ch8"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

@@ -136,6 +136,8 @@ LBB1_5:                                 ; =>This Inner Loop Header: Depth=1
 	ldurh	w8, [x29, #-78]
 	add	w8, w8, #2
 	sturh	w8, [x29, #-78]
+	mov	w0, #10000
+	bl	_usleep
 	b	LBB1_5
 	.cfi_endproc
                                         ; -- End function

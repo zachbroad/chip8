@@ -8,7 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/zach/CLionProjects/chip8/main.cpp" "CMakeFiles/chip8.dir/main.cpp.o" "gcc" "CMakeFiles/chip8.dir/main.cpp.o.d"
+  "/Users/zach/CLionProjects/chip8/chip8.c" "CMakeFiles/chip8.dir/chip8.c.o" "gcc" "CMakeFiles/chip8.dir/chip8.c.o.d"
+  "/Users/zach/CLionProjects/chip8/constants.c" "CMakeFiles/chip8.dir/constants.c.o" "gcc" "CMakeFiles/chip8.dir/constants.c.o.d"
+  "/Users/zach/CLionProjects/chip8/main.c" "CMakeFiles/chip8.dir/main.c.o" "gcc" "CMakeFiles/chip8.dir/main.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

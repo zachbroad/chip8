@@ -129,29 +129,77 @@ chip8/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/build
 .PHONY : chip8/fast
 
-main.o: main.cpp.o
+chip8.o: chip8.c.o
+.PHONY : chip8.o
+
+# target to build an object file
+chip8.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/chip8.c.o
+.PHONY : chip8.c.o
+
+chip8.i: chip8.c.i
+.PHONY : chip8.i
+
+# target to preprocess a source file
+chip8.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/chip8.c.i
+.PHONY : chip8.c.i
+
+chip8.s: chip8.c.s
+.PHONY : chip8.s
+
+# target to generate assembly for a file
+chip8.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/chip8.c.s
+.PHONY : chip8.c.s
+
+constants.o: constants.c.o
+.PHONY : constants.o
+
+# target to build an object file
+constants.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/constants.c.o
+.PHONY : constants.c.o
+
+constants.i: constants.c.i
+.PHONY : constants.i
+
+# target to preprocess a source file
+constants.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/constants.c.i
+.PHONY : constants.c.i
+
+constants.s: constants.c.s
+.PHONY : constants.s
+
+# target to generate assembly for a file
+constants.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/constants.c.s
+.PHONY : constants.c.s
+
+main.o: main.c.o
 .PHONY : main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.cpp.o
-.PHONY : main.cpp.o
+main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.c.o
+.PHONY : main.c.o
 
-main.i: main.cpp.i
+main.i: main.c.i
 .PHONY : main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.cpp.i
-.PHONY : main.cpp.i
+main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.c.i
+.PHONY : main.c.i
 
-main.s: main.cpp.s
+main.s: main.c.s
 .PHONY : main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.cpp.s
-.PHONY : main.cpp.s
+main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chip8.dir/build.make CMakeFiles/chip8.dir/main.c.s
+.PHONY : main.c.s
 
 # Help Target
 help:
@@ -162,6 +210,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... chip8"
+	@echo "... chip8.o"
+	@echo "... chip8.i"
+	@echo "... chip8.s"
+	@echo "... constants.o"
+	@echo "... constants.i"
+	@echo "... constants.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

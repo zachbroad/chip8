@@ -1,7 +1,24 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.5)
 project(chip8)
 
-set(CMAKE_CXX_STANDARD 23)
+# Create an option to switch between a system sdl library and a vendored SDL library
+option(MYGAME_VENDORED "Use vendored libraries" OFF)
 
-add_executable(chip8 main.cpp)
-target_link_libraries(chip8 SDL)
+if(MYGAME_VENDORED)
+    # This assumes you have added SDL as a submodule in vendored/SDL
+    add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+else()
+    # 1. Look for a SDL3 package,
+    # 2. look for the SDL3-shared component, and
+    # 3. fail if the shared component cannot be found.
+    find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+endif()
+
+# Create your game executable target as usual
+# Add particle.ch8 as a resource file
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/particle.ch8 ${CMAKE_CURRENT_BINARY_DIR}/particle.ch8 COPYONLY)
+
+add_executable(chip8 main.c chip8.c constants.c)
+
+# Link to the actual SDL3 library.
+target_link_libraries(chip8 PRIVATE SDL3::SDL3)
