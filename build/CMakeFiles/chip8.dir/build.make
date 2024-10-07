@@ -124,7 +124,8 @@ chip8: CMakeFiles/chip8.dir/main.c.o
 chip8: CMakeFiles/chip8.dir/chip8.c.o
 chip8: CMakeFiles/chip8.dir/constants.c.o
 chip8: CMakeFiles/chip8.dir/build.make
-chip8: /usr/local/lib/libSDL3.0.dylib
+chip8: SDL/libSDL2maind.a
+chip8: SDL/libSDL2-2.0d.0.dylib
 chip8: CMakeFiles/chip8.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/zach/CLionProjects/chip8/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable chip8"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/chip8.dir/link.txt --verbose=$(VERBOSE)

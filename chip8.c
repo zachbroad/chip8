@@ -1,5 +1,7 @@
 #include "chip8.h"
 #include "constants.h"
+#include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /**
@@ -52,13 +54,13 @@
 // 0nnn - SYS addr
 void chip8_sys(Chip8* chip8, unsigned short nnn)
 {
-    chip8->pc = nnn; // TODO : ignore?
+    chip8->pc = nnn;
 }
 
 // 00E0 - CLS
 void chip8_cls(Chip8* chip8)
 {
-    for (int i = 0; i < SCREEN_SIZE; i++) // 64x32 Screen
+    for(int i = 0; i < SCREEN_SIZE; i++) // 64x32 Screen
     {
         chip8->gfx[i] = 0; // Set to black
     }
@@ -84,13 +86,13 @@ void chip8_call(Chip8* chip8, unsigned short nnn)
 {
     chip8->sp++;
     chip8->stack[chip8->sp] = chip8->pc;
-    chip8->pc = nnn;
+    chip8->pc               = nnn;
 }
 
 // 3xkk - SE Vx, byte
 void chip8_se(Chip8* chip8, unsigned char x, unsigned char kk)
 {
-    if (chip8->V[x] == kk)
+    if(chip8->V[x] == kk)
     {
         chip8->pc += 2;
     }
@@ -99,7 +101,7 @@ void chip8_se(Chip8* chip8, unsigned char x, unsigned char kk)
 // 4xkk - SNE Vx, byte
 void chip8_sne(Chip8* chip8, unsigned char x, unsigned char kk)
 {
-    if (chip8->V[x] != kk)
+    if(chip8->V[x] != kk)
     {
         chip8->pc += 2;
     }
@@ -108,7 +110,7 @@ void chip8_sne(Chip8* chip8, unsigned char x, unsigned char kk)
 // 5xy0 - SE Vx, Vy
 void chip8_se_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
-    if (chip8->V[x] == chip8->V[y])
+    if(chip8->V[x] == chip8->V[y])
     {
         chip8->pc += 2;
     }
@@ -153,8 +155,8 @@ void chip8_xor_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 // 8xy4 - ADD Vx, Vy
 void chip8_add_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
-    short temp = x + y;
-    if (temp > 255) 
+    unsigned short temp = chip8->V[x] + chip8->V[y];
+    if(temp > 255)
     {
         chip8->V[0xF] = 1;
     }
@@ -171,11 +173,11 @@ void chip8_add_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 // If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
 void chip8_sub_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
-    if (chip8->V[x] > chip8->V[y])
+    if(chip8->V[x] > chip8->V[y])
     {
         chip8->V[0xF] = 1;
     }
-    else 
+    else
     {
         chip8->V[0xF] = 0;
     }
@@ -188,8 +190,9 @@ void chip8_sub_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 // If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 void chip8_shr_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
+    // vx = vy?
     chip8->V[0xF] = chip8->V[x] & 0x1;
-    chip8->V[x] = chip8->V[x] / 2;
+    chip8->V[x]   = chip8->V[x] >> 1;
 }
 
 
@@ -198,7 +201,7 @@ void chip8_shr_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 // If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
 void chip8_subn_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
-    if (chip8->V[y] > chip8->V[x])
+    if(chip8->V[y] > chip8->V[x])
     {
         chip8->V[0xF] = 1;
     }
@@ -208,6 +211,7 @@ void chip8_subn_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
     }
 
     chip8->V[x] = chip8->V[y] - chip8->V[x];
+
 }
 
 
@@ -217,13 +221,13 @@ void chip8_subn_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 void chip8_shl_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
     chip8->V[0xF] = chip8->V[x] & 0x1;
-    chip8->V[x] = chip8->V[x] * 2;
+    chip8->V[x]   = chip8->V[x] * 2;
 }
 
 // 9xy0 - SNE Vx, Vy
 void chip8_sne_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 {
-    if (chip8->V[x] != chip8->V[y])
+    if(chip8->V[x] != chip8->V[y])
     {
         chip8->pc += 2;
     }
@@ -232,7 +236,7 @@ void chip8_sne_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
 // Annn - LD I, addr
 void chip8_ld_i_addr(Chip8* chip8, unsigned short nnn)
 {
-    chip8->V[chip8->I] = nnn;
+    chip8->I = nnn;
 }
 
 // Bnnn - JP V0, addr
@@ -248,15 +252,53 @@ void chip8_jp_v0_addr(Chip8* chip8, unsigned short nnn)
 // The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
 void chip8_rnd_vx_byte(Chip8* chip8, unsigned char x, unsigned short kk)
 {
-    int rn = rand() % 255;
+    int rn      = rand() % 256;
     chip8->V[x] = rn & (unsigned short) kk;
 }
 
 // Dxyn - DRW Vx, Vy, nibble
 // Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
-// The interpreter reads n bytes from memory, starting at the address stored in I. These bytes are then displayed as sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto the existing screen. If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the coordinates of the display, it wraps around to the opposite side of the screen. See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
+//
+// The interpreter reads n bytes from memory, starting at the address stored in
+// I. These bytes are then displayed as sprites on screen at coordinates (Vx, Vy).
+//
+// Sprites are XORed onto the existing screen.
+//
+// If this causes any pixels to be erased, VF is set to 1, otherwise it is set to 0.
+// If the sprite is positioned so part of it is outside the coordinates of the display, it wraps around to
+// the opposite side of the screen.
+//
+// See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
 void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsigned char n)
 {
+    unsigned short px = chip8->V[x] % 64;
+    unsigned short py = chip8->V[y] % 32;
+    unsigned short height = n;
+    unsigned char pixel;
+
+    chip8->V[0xF] = 0;
+    for (int yline = 0; yline < height; yline++)
+    {
+        if (py + yline >= 32) break;
+
+        pixel = chip8->memory[chip8->I + yline];
+        for (int xline = 0; xline < 8; xline++)
+        {
+            if (px + xline >= 64) break;
+
+            if ((pixel & (0x80 >> xline)) != 0)
+            {
+                unsigned int index = (px + xline + ((py + yline) * 64));
+                if (chip8->gfx[index] == 1)
+                {
+                    chip8->V[0xF] = 1;
+                }
+                chip8->gfx[index] ^= 1;
+            }
+        }
+    }
+
+    chip8->drawFlag = 1;
 }
 
 // Ex9E - SKP Vx
@@ -264,20 +306,18 @@ void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsi
 // Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
 void chip8_skp_vx(Chip8* chip8, unsigned char x)
 {
-    // TODO: Check
-    if (chip8->key[chip8->V[x]] == 1)
+    if(chip8->key[chip8->V[x]] == 1)
     {
         chip8->pc += 2;
     }
 }
- 
+
 // ExA1 - SKNP Vx
 // Skip next instruction if key with the value of Vx is not pressed.
 // Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
 void chip8_sknp_vx(Chip8* chip8, unsigned char x)
 {
-    // TODO:
-    if (chip8->key[chip8->V[x]] == 0)
+    if(chip8->key[chip8->V[x]] == 0)
     {
         chip8->pc += 2;
     }
@@ -290,7 +330,7 @@ void chip8_ld_vx_dt(Chip8* chip8, unsigned char x)
 }
 
 // Fx0A - LD Vx, K
-void chip8_ld_vx_k(Chip8* chip8)
+void chip8_ld_vx_k(Chip8* chip8, unsigned char x)
 {
     // TODO: Implement
 }
@@ -316,32 +356,38 @@ void chip8_add_i_vx(Chip8* chip8, unsigned char x)
 }
 
 // Fx29 - LD F, Vx
-void chip8_ld_f_vx(Chip8* chip8)
+void chip8_ld_f_vx(Chip8* chip8, unsigned char x)
 {
-    // TODO: Implement
+    chip8->I = CHIP8_FONTSET[chip8->V[x]];
 }
 
 // Fx33 - LD B, Vx
-void chip8_ld_b_vx(Chip8* chip8)
+void chip8_ld_b_vx(Chip8* chip8, unsigned char x)
 {
+    unsigned char h = chip8->V[x] / 100;
+    unsigned char t = (chip8->V[x] / 10) % 10;
+    unsigned char o = chip8->V[x] % 10;
 
+    chip8->memory[chip8->I]     = h;
+    chip8->memory[chip8->I + 1] = t;
+    chip8->memory[chip8->I + 2] = o;
 }
 
 // Fx55 - LD [I], Vx
-void chip8_ld_i_vx(Chip8* chip8)
+void chip8_ld_i_vx(Chip8* chip8, unsigned char x)
 {
-    for(int i = 0; i < 0xF; i++)
+    for(int i = 0; i <= x; i++)
     {
-        chip8->memory[chip8->I + i] = chip8->V[i]; // todo: confirm
+        chip8->memory[(chip8->I + i)] = chip8->V[i]; // todo: confirm
     }
 }
 
 // Fx65 - LD Vx, [I]
-void chip8_ld_vx_i(Chip8* chip8)
+void chip8_ld_vx_i(Chip8* chip8, unsigned char x)
 {
-    for(int i = 0; i < 0xF; i++)
+    for(int i = 0; i <= x; i++)
     {
-        chip8->V[i] = chip8->memory[chip8->I + i]; // todo: confirm
+        chip8->V[i] = chip8->memory[(chip8->I + i)]; // todo: confirm
     }
 }
 

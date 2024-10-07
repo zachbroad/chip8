@@ -3,28 +3,31 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_error.h>
-#include <SDL3/SDL_init.h>
-#include <SDL3/SDL_log.h>
-#include <SDL3/SDL_video.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_log.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 
 #include "chip8.h"
 #include "constants.h"
 
-#define DEBUG = 1
-
 Chip8 chip8;
 SDL_Window* window;
+SDL_Texture* canvas;
+SDL_Renderer* renderer;
 
 void chip8_FetchDecodeExecute(Chip8* chip8);
-void chip8_LoadProgram(Chip8* chip8, char* program);
 void chip8_InitDisplay(Chip8* chip8);
 void chip8_InitSystem(Chip8* chip8);
+void chip8_LoadProgram(Chip8* chip8, char* program);
+void chip8_RenderLoop(void);
 
-unsigned short const PROGRAM_RAM     = 0x200;
 unsigned short const INTERPRETER_RAM = 0x000;
+unsigned short const PROGRAM_RAM     = 0x200;
 unsigned short const DISPLAY_RAM     = 0xF00;
+unsigned short const SCALE_FACTOR    = 10;
 
 int main(void)
 {
@@ -32,6 +35,7 @@ int main(void)
     printf("Initializing Chip8...\n");
 
     chip8_InitSystem(&chip8);
+    chip8_LoadProgram(&chip8, "ibm.ch8");
     chip8_InitDisplay(&chip8);
 
     // Main loop
@@ -39,23 +43,13 @@ int main(void)
     {
         // Execute
         chip8_FetchDecodeExecute(&chip8);
-
-        SDL_Event event;
-        while(SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-            case SDL_EVENT_QUIT: return 0;
-            }
-        }
-
-        // Add rendering code here
-
+        chip8_RenderLoop();
         usleep(10000); // Slow down execution
     }
 
     // Cleanup
     SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
     SDL_Quit();
 
     return 0;
@@ -67,11 +61,11 @@ void chip8_FetchDecodeExecute(Chip8* chip8)
     chip8->opcode = chip8->memory[chip8->pc] << 8 | chip8->memory[chip8->pc + 1];
 
     // Decode
-    short nnn         = chip8->opcode & 0x0FFF;
-    unsigned char x   = chip8->opcode & 0x0F00;
-    unsigned char y   = chip8->opcode & 0x00F0;
-    unsigned short kk = chip8->opcode & 0x00FF; // Byte
-    unsigned char n   = chip8->opcode & 0x000F;
+    short nnn        = chip8->opcode & 0x0FFF;
+    unsigned char x  = (chip8->opcode & 0x0F00) >> 8;
+    unsigned char y  = (chip8->opcode & 0x00F0) >> 4;
+    unsigned char kk = chip8->opcode & 0x00FF; // Byte
+    unsigned char n  = chip8->opcode & 0x000F;
 
     // Execute
     switch(chip8->opcode & 0xF000)
@@ -183,19 +177,61 @@ void chip8_FetchDecodeExecute(Chip8* chip8)
         chip8_drw_vx_vy_nibble(chip8, x, y, n);
         break;
     case 0xE000: // Ex9E - SKP Vx
-        printf("0x%04X: SKP V%X\n", chip8->pc, x);
-        chip8_skp_vx(chip8, x);
+        switch(chip8->opcode & 0x00FF)
+        {
+        case 0x9E: // SKP Vx
+            printf("0x%04X: SKP V%X\n", chip8->pc, x);
+            chip8_skp_vx(chip8, x);
+            break;
+        case 0xA1: // SKNP Vx
+            printf("0x%04X: SKNP V%X\n", chip8->pc, x);
+            chip8_sknp_vx(chip8, x);
+            break;
+        }
         break;
     case 0xF000: // Fx07 - LD Vx, DT
-        printf("0x%04X: LD V%X, DT\n", chip8->pc, x);
-        chip8_ld_vx_dt(chip8, x);
-        break;
-    default:
-        printf("0x%04X: Unknown opcode: 0x%04X\n", chip8->pc, chip8->opcode);
+        switch(chip8->opcode & 0x00FF)
+        {
+        case 0x07: // LD Vx, DT
+            printf("0x%04X: LD V%X, DT\n", chip8->pc, x);
+            chip8_ld_vx_dt(chip8, x);
+            break;
+        case 0x0A: // LD Vx, K
+            printf("0x%04X: LD V%X, K\n", chip8->pc, x);
+            chip8_ld_vx_k(chip8, x);
+            break;
+        case 0x15: // LD DT, Vx
+            printf("0x%04X: LD DT, V%X\n", chip8->pc, x);
+            chip8_ld_dt_vx(chip8, x);
+            break;
+        case 0x18: // LD ST, Vx
+            printf("0x%04X: LD ST, V%X\n", chip8->pc, x);
+            chip8_ld_st_vx(chip8, x);
+            break;
+        case 0x1E: // ADD I, Vx
+            printf("0x%04X: ADD I, V%X\n", chip8->pc, x);
+            chip8_add_i_vx(chip8, x);
+            break;
+        case 0x29: // LD F, Vx
+            printf("0x%04X: LD F, V%X\n", chip8->pc, x);
+            chip8_ld_f_vx(chip8, x);
+            break;
+        case 0x33: // LD B, Vx
+            printf("0x%04X: LD B, V%X\n", chip8->pc, x);
+            chip8_ld_b_vx(chip8, x);
+            break;
+        case 0x55: // LD [I], Vx
+            printf("0x%04X: LD [I], V%X\n", chip8->pc, x);
+            chip8_ld_i_vx(chip8, x);
+            break;
+        case 0x65: // LD Vx, [I]
+            printf("0x%04X: LD V%X, [I]\n", chip8->pc, x);
+            chip8_ld_vx_i(chip8, x);
+            break;
+        }
         break;
     }
 
-    // Increment program counter
     chip8->pc += 2;
 }
 
@@ -221,36 +257,54 @@ void chip8_InitSystem(Chip8* chip8)
     }
 }
 
-void chip8_loadProgram(Chip8* chip8, char* program)
+void chip8_LoadProgram(Chip8* chip8, char* program)
 {
     // Load program
-    printf("Loading program...\n");
-    FILE* filePtr;
-    filePtr = fopen("particle.ch8", "rb");
-    char buffer[3584];
-    fgets(buffer, 3584, filePtr);
-
-    for(int i = 0; i < 3584; i++)
+    printf("Loading program %s\n", program);
+    FILE* filePtr = fopen(program, "rb");
+    if(filePtr == NULL)
     {
-        chip8->memory[PROGRAM_RAM + i] = program[i];
+        printf("Error: Unable to open file %s\n", program);
+        exit(1);
     }
+
+    fseek(filePtr, 0, SEEK_END);
+    int size = ftell(filePtr);
+    rewind(filePtr);
+
+    if(size > 4096 - PROGRAM_RAM)
+    {
+        printf("Program too big!\n");
+        fclose(filePtr);
+        exit(1);
+    }
+
+    size_t bytesRead = fread(&chip8->memory[PROGRAM_RAM], 1, size, filePtr);
+    if(bytesRead != size)
+    {
+        printf("Failed to read entire file\n");
+        fclose(filePtr);
+        exit(1);
+    }
+
+    fclose(filePtr);
 }
 
 void chip8_InitDisplay(Chip8* chip8)
 {
     SDL_SetHint(SDL_HINT_NO_SIGNAL_HANDLERS, "1");
     // Initialize SDL
-    if(!SDL_Init(SDL_INIT_VIDEO))
+    if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         printf("Failed to initialize SDL: %s\n", SDL_GetError());
         exit(1);
     }
 
-    window = SDL_CreateWindow("CHIP8",       // window title
-                              SCREEN_WIDTH,  // width, in pixels
-                              SCREEN_HEIGHT, // height, in pixels
-                              SDL_WINDOW_OPENGL | SDL_WINDOW_ALWAYS_ON_TOP // flags - see below
-    );
+    window = SDL_CreateWindow("CHIP8", // window title
+                              SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                              SCREEN_WIDTH * SCALE_FACTOR,  // width, in pixels
+                              SCREEN_HEIGHT * SCALE_FACTOR, // height, in pixels
+                              SDL_WINDOW_RESIZABLE);
 
     // Check that the window was successfully created
     if(window == NULL)
@@ -260,10 +314,67 @@ void chip8_InitDisplay(Chip8* chip8)
                      SDL_GetError());
         exit(1);
     }
-    else
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if(renderer == NULL)
     {
-        printf("Window created\n");
-        // The window was successfully created, so show it
-        SDL_ShowWindow(window);
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create renderer: %s\n",
+                     SDL_GetError());
+        exit(1);
+    }
+
+    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    canvas = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
+                               SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
+    if(canvas == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create canvas: %s\n",
+                     SDL_GetError());
+        exit(1);
+    }
+
+    SDL_ShowWindow(window);
+}
+
+
+void chip8_RenderLoop(void)
+{
+    SDL_Event event;
+    while(SDL_PollEvent(&event))
+    {
+        if(event.type == SDL_QUIT)
+        {
+            SDL_DestroyTexture(canvas);
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_Quit();
+            exit(0);
+        }
+        else if(event.type == SDL_WINDOWEVENT)
+        {
+            if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+            {
+                int w = event.window.data1;
+                int h = event.window.data2;
+                SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+        }
+    }
+
+    if(chip8.drawFlag)
+    {
+        uint32_t pixels[SCREEN_WIDTH * SCREEN_HEIGHT];
+        for(int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
+        {
+            pixels[i] = chip8.gfx[i] ? 0xFFFFFFFF : 0x000000FF;
+        }
+
+        SDL_UpdateTexture(canvas, NULL, pixels, SCREEN_WIDTH * sizeof(uint32_t));
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, canvas, NULL, NULL);
+        SDL_RenderPresent(renderer);
+
+        chip8.drawFlag = 0;
     }
 }

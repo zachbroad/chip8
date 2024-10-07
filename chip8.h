@@ -66,11 +66,12 @@ void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsi
 void chip8_skp_vx(Chip8* chip8, unsigned char x);
 void chip8_sknp_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_vx_dt(Chip8* chip8, unsigned char x);
-void chip8_ld_vx_k(Chip8* chip8); // TODO: Implement this
+void chip8_ld_vx_k(Chip8* chip8, unsigned char x); // TODO: Implement this
 void chip8_ld_dt_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_st_vx(Chip8* chip8, unsigned char x);
 void chip8_add_i_vx(Chip8* chip8, unsigned char x);
-void chip8_ld_f_vx(Chip8* chip8); // TODO: Implement this
-void chip8_ld_b_vx(Chip8* chip8); // TODO: Implement this
-void chip8_ld_i_vx(Chip8* chip8);
-void chip8_ld_vx_i(Chip8* chip8);
+void chip8_ld_f_vx(Chip8* chip8, unsigned char x); // TODO: Implement this
+void chip8_ld_b_vx(Chip8* chip8, unsigned char x);
+void chip8_ld_i_vx(Chip8* chip8, unsigned char x);
+void chip8_ld_vx_i(Chip8* chip8, unsigned char x);
+
