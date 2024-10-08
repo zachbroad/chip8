@@ -147,13 +147,13 @@
 			"path" : "/opt/homebrew/Cellar/cmake/3.29.4/share/cmake/Modules/CMakeCommonLanguageInclude.cmake"
 		},
 		{
-			"path" : "particle.ch8"
+			"path" : "roms/particle.ch8"
 		},
 		{
-			"path" : "zero.ch8"
+			"path" : "roms/zero.ch8"
 		},
 		{
-			"path" : "ibm.ch8"
+			"path" : "roms/ibm.ch8"
 		},
 		{
 			"path" : "SDL/CMakeLists.txt"

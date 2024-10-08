@@ -31,13 +31,32 @@ unsigned short const PROGRAM_RAM     = 0x200;
 unsigned short const DISPLAY_RAM     = 0xF00;
 unsigned short const SCALE_FACTOR    = 10;
 
+// TODO: Handle roms better
+
+char* roms[] = {"ibm.ch8", "zero.ch8", "particle.ch8"};
+
+int rom;
+//
+//
+//
+void promptRoms(void)
+{
+    printf("Available ROMs:\n");
+    printf("1. IBM Logo\n");
+    printf("2. Zero Demo\n");
+    printf("3. Particle\n");
+
+    printf("Enter the number of the ROM you want to load: ");
+    scanf("%d", &rom);
+}
+
 int main(void)
 {
     printf("Starting emulator...\n");
+    promptRoms();
     printf("Initializing Chip8...\n");
-
     chip8_InitSystem(&chip8);
-    chip8_LoadProgram(&chip8, "ibm.ch8");
+    chip8_LoadProgram(&chip8, roms[rom - 1]);
     chip8_InitDisplay(&chip8);
 
     const Uint32 TARGET_FRAME_TIME = 1000 / 60;
