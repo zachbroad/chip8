@@ -10,6 +10,8 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 
+#include "SDL_events.h"
+#include "SDL_stdinc.h"
 #include "chip8.h"
 #include "constants.h"
 
@@ -38,12 +40,34 @@ int main(void)
     chip8_LoadProgram(&chip8, "ibm.ch8");
     chip8_InitDisplay(&chip8);
 
+    const Uint32 TARGET_FRAME_TIME = 1000 / 60;
+    Uint32 lastTimerUpdate         = SDL_GetTicks();
+
     // Main loop
     while(true)
     {
         // Execute
         chip8_FetchDecodeExecute(&chip8);
         chip8_RenderLoop();
+
+        Uint32 currentTime = SDL_GetTicks();
+        if(currentTime - lastTimerUpdate >= TARGET_FRAME_TIME)
+        {
+            if(chip8.delay_timer > 0)
+            {
+                chip8.delay_timer--;
+            }
+            if(chip8.sound_timer > 0)
+            {
+                if(chip8.sound_timer == 1)
+                {
+                    printf("BEEP!\n"); // TODO: Implement sound
+                }
+                chip8.sound_timer--;
+            }
+
+            lastTimerUpdate = currentTime;
+        }
         usleep(10000); // Slow down execution
     }
 
@@ -360,6 +384,50 @@ void chip8_RenderLoop(void)
                 SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
             }
         }
+        else if(event.type == SDL_KEYDOWN)
+        {
+            switch(event.key.keysym.sym)
+            {
+            case SDLK_z: chip8.key[0x1] = 1; break;
+            case SDLK_x: chip8.key[0x2] = 1; break;
+            case SDLK_c: chip8.key[0x3] = 1; break;
+            case SDLK_v: chip8.key[0xC] = 1; break;
+            case SDLK_a: chip8.key[0x4] = 1; break;
+            case SDLK_s: chip8.key[0x5] = 1; break;
+            case SDLK_d: chip8.key[0x6] = 1; break;
+            case SDLK_f: chip8.key[0xD] = 1; break;
+            case SDLK_q: chip8.key[0x7] = 1; break;
+            case SDLK_w: chip8.key[0x8] = 1; break;
+            case SDLK_e: chip8.key[0x9] = 1; break;
+            case SDLK_r: chip8.key[0xE] = 1; break;
+            case SDLK_1: chip8.key[0x1] = 1; break;
+            case SDLK_2: chip8.key[0x2] = 1; break;
+            case SDLK_3: chip8.key[0x3] = 1; break;
+            case SDLK_4: chip8.key[0xC] = 1; break;
+            }
+        }
+        else if(event.type == SDL_KEYUP)
+        {
+            switch(event.key.keysym.sym)
+            {
+            case SDLK_z: chip8.key[0x1] = 0; break;
+            case SDLK_x: chip8.key[0x2] = 0; break;
+            case SDLK_c: chip8.key[0x3] = 0; break;
+            case SDLK_v: chip8.key[0xC] = 0; break;
+            case SDLK_a: chip8.key[0x4] = 0; break;
+            case SDLK_s: chip8.key[0x5] = 0; break;
+            case SDLK_d: chip8.key[0x6] = 0; break;
+            case SDLK_f: chip8.key[0xD] = 0; break;
+            case SDLK_q: chip8.key[0x7] = 0; break;
+            case SDLK_w: chip8.key[0x8] = 0; break;
+            case SDLK_e: chip8.key[0x9] = 0; break;
+            case SDLK_r: chip8.key[0xE] = 0; break;
+            case SDLK_1: chip8.key[0x1] = 0; break;
+            case SDLK_2: chip8.key[0x2] = 0; break;
+            case SDLK_3: chip8.key[0x3] = 0; break;
+            case SDLK_4: chip8.key[0xC] = 0; break;
+            }
+        }
     }
 
     if(chip8.drawFlag)
@@ -367,9 +435,10 @@ void chip8_RenderLoop(void)
         uint32_t pixels[SCREEN_WIDTH * SCREEN_HEIGHT];
         for(int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
         {
-            pixels[i] = chip8.gfx[i] ? 0xFFFFFFFF : 0x000000FF;
+            pixels[i] = chip8.gfx[i] ? 0x0000FF00 : 0x00000000;
         }
 
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_UpdateTexture(canvas, NULL, pixels, SCREEN_WIDTH * sizeof(uint32_t));
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, canvas, NULL, NULL);

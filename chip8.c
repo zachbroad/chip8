@@ -1,7 +1,6 @@
 #include "chip8.h"
+#include "SDL_events.h"
 #include "constants.h"
-#include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 /**
@@ -211,7 +210,6 @@ void chip8_subn_vx_vy(Chip8* chip8, unsigned char x, unsigned char y)
     }
 
     chip8->V[x] = chip8->V[y] - chip8->V[x];
-
 }
 
 
@@ -271,25 +269,27 @@ void chip8_rnd_vx_byte(Chip8* chip8, unsigned char x, unsigned short kk)
 // See instruction 8xy3 for more information on XOR, and section 2.4, Display, for more information on the Chip-8 screen and sprites.
 void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsigned char n)
 {
-    unsigned short px = chip8->V[x] % 64;
-    unsigned short py = chip8->V[y] % 32;
+    unsigned short px     = chip8->V[x] % 64;
+    unsigned short py     = chip8->V[y] % 32;
     unsigned short height = n;
     unsigned char pixel;
 
     chip8->V[0xF] = 0;
-    for (int yline = 0; yline < height; yline++)
+    for(int yline = 0; yline < height; yline++)
     {
-        if (py + yline >= 32) break;
+        if(py + yline >= 32)
+            break;
 
         pixel = chip8->memory[chip8->I + yline];
-        for (int xline = 0; xline < 8; xline++)
+        for(int xline = 0; xline < 8; xline++)
         {
-            if (px + xline >= 64) break;
+            if(px + xline >= 64)
+                break;
 
-            if ((pixel & (0x80 >> xline)) != 0)
+            if((pixel & (0x80 >> xline)) != 0)
             {
                 unsigned int index = (px + xline + ((py + yline) * 64));
-                if (chip8->gfx[index] == 1)
+                if(chip8->gfx[index] == 1)
                 {
                     chip8->V[0xF] = 1;
                 }
@@ -332,7 +332,40 @@ void chip8_ld_vx_dt(Chip8* chip8, unsigned char x)
 // Fx0A - LD Vx, K
 void chip8_ld_vx_k(Chip8* chip8, unsigned char x)
 {
-    // TODO: Implement
+    char validInputPressed = 0;
+
+    while (validInputPressed == 0)
+    {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_z:
+                case SDLK_x:
+                case SDLK_c:
+                case SDLK_v:
+                case SDLK_a:
+                case SDLK_s:
+                case SDLK_d:
+                case SDLK_f:
+                case SDLK_q:
+                case SDLK_w:
+                case SDLK_e:
+                case SDLK_r:
+                case SDLK_1:
+                case SDLK_2:
+                case SDLK_3:
+                case SDLK_4:
+                    validInputPressed = 1;
+                    chip8->V[x] = event.key.keysym.sym;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 // Fx15 - LD DT, Vx
