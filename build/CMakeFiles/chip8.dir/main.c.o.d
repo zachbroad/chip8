@@ -97,8 +97,7 @@ CMakeFiles/chip8.dir/main.c.o: /Users/zach/CLionProjects/chip8/main.c \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_select.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_uuid_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/gethostuuid.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_main.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_events.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_stdinc.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include-config-debug/SDL2/SDL_config.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_platform.h \
@@ -155,22 +154,12 @@ CMakeFiles/chip8.dir/main.c.o: /Users/zach/CLionProjects/chip8/main.c \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/math.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/float.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/float.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_assert.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_atomic.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_audio.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_error.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_endian.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_mutex.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_thread.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_rwops.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_clipboard.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_cpuinfo.h \
-  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/arm_neon.h \
-  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/arm_bf16.h \
-  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_events.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_video.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_pixels.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_endian.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_rect.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_rwops.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_surface.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_blendmode.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_keyboard.h \
@@ -179,11 +168,22 @@ CMakeFiles/chip8.dir/main.c.o: /Users/zach/CLionProjects/chip8/main.c \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_mouse.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_joystick.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_guid.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_mutex.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_gamecontroller.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_sensor.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_quit.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_gesture.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_touch.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_main.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_assert.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_atomic.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_audio.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_thread.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_clipboard.h \
+  /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_cpuinfo.h \
+  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/arm_neon.h \
+  /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include/arm_bf16.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_filesystem.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_haptic.h \
   /Users/zach/CLionProjects/chip8/build/SDL/include/SDL2/SDL_hidapi.h \

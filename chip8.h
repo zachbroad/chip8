@@ -15,7 +15,6 @@
  *
  * Graphics output is 64x32 pixels
  * Each pixel can be on or off - monochrome
- *
  * */
 
 #ifndef CHIP8_H
@@ -28,8 +27,8 @@ typedef struct {
     unsigned short I; // Index register
     unsigned short pc; // Program counter
     unsigned char* gfx; // Graphics buffer [64 * 32]
-    unsigned char delay_timer; // Delay timer
-    unsigned char sound_timer; // Sound timer
+    unsigned char delayTimer; // Delay timer
+    unsigned char soundTimer; // Sound timer
     unsigned short* stack; // Stack [16]
     unsigned short sp; // Stack pointer
     unsigned char* key; // Keypad [16]
@@ -38,7 +37,6 @@ typedef struct {
 
 #endif
 
-// 0nnn - SYS addr
 void chip8_sys(Chip8* chip8, unsigned short nnn);
 void chip8_cls(Chip8* chip8);
 void chip8_ret(Chip8* chip8);
@@ -66,11 +64,11 @@ void chip8_drw_vx_vy_nibble(Chip8* chip8, unsigned char x, unsigned char y, unsi
 void chip8_skp_vx(Chip8* chip8, unsigned char x);
 void chip8_sknp_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_vx_dt(Chip8* chip8, unsigned char x);
-void chip8_ld_vx_k(Chip8* chip8, unsigned char x); // TODO: Implement this
+void chip8_ld_vx_k(Chip8* chip8, unsigned char x);
 void chip8_ld_dt_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_st_vx(Chip8* chip8, unsigned char x);
 void chip8_add_i_vx(Chip8* chip8, unsigned char x);
-void chip8_ld_f_vx(Chip8* chip8, unsigned char x); // TODO: Implement this
+void chip8_ld_f_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_b_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_i_vx(Chip8* chip8, unsigned char x);
 void chip8_ld_vx_i(Chip8* chip8, unsigned char x);

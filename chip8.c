@@ -326,7 +326,7 @@ void chip8_sknp_vx(Chip8* chip8, unsigned char x)
 // Fx07 - LD Vx, DT
 void chip8_ld_vx_dt(Chip8* chip8, unsigned char x)
 {
-    chip8->V[x] = chip8->delay_timer;
+    chip8->V[x] = chip8->delayTimer;
 }
 
 // Fx0A - LD Vx, K
@@ -372,14 +372,14 @@ void chip8_ld_vx_k(Chip8* chip8, unsigned char x)
 // Load Delay Timer from register X
 void chip8_ld_dt_vx(Chip8* chip8, unsigned char x)
 {
-    chip8->delay_timer = chip8->V[x];
+    chip8->delayTimer = chip8->V[x];
 }
 
 // Fx18 - LD ST, Vx
 // Load sound timer from register x
 void chip8_ld_st_vx(Chip8* chip8, unsigned char x)
 {
-    chip8->sound_timer = chip8->V[x];
+    chip8->soundTimer = chip8->V[x];
 }
 
 // Fx1E - ADD I, Vx

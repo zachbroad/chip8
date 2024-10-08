@@ -1,11 +1,10 @@
 #include "constants.h"
 
-int const SCREEN_WIDTH = 64;
+int const SCREEN_WIDTH  = 64;
 int const SCREEN_HEIGHT = 32;
-int const SCREEN_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT;
+int const SCREEN_SIZE   = SCREEN_WIDTH * SCREEN_HEIGHT;
 
-unsigned char const  CHIP8_FONTSET[80] =
-{
+unsigned char const CHIP8_FONTSET[80] = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70, // 1
     0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2

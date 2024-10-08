@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "SDL2/SDL_events.h"
+#include "SDL2/SDL_stdinc.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_log.h>
@@ -10,8 +12,6 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 
-#include "SDL_events.h"
-#include "SDL_stdinc.h"
 #include "chip8.h"
 #include "constants.h"
 
@@ -23,70 +23,41 @@ SDL_Renderer* renderer;
 void chip8_FetchDecodeExecute(Chip8* chip8);
 void chip8_InitDisplay(Chip8* chip8);
 void chip8_InitSystem(Chip8* chip8);
+void chip8_Input(void);
 void chip8_LoadProgram(Chip8* chip8, char* program);
+void chip8_PromptRoms(void);
 void chip8_RenderLoop(void);
 
 unsigned short const INTERPRETER_RAM = 0x000;
 unsigned short const PROGRAM_RAM     = 0x200;
 unsigned short const DISPLAY_RAM     = 0xF00;
 unsigned short const SCALE_FACTOR    = 10;
+Uint32 const TARGET_FRAME_TIME       = 1000 / 60;
+Uint32 lastTimerUpdate;
 
 // TODO: Handle roms better
-
-char* roms[] = {"ibm.ch8", "zero.ch8", "particle.ch8"};
-
+char* roms[] = { "ibm.ch8", "zero.ch8", "particle.ch8" };
 int rom;
-//
-//
-//
-void promptRoms(void)
-{
-    printf("Available ROMs:\n");
-    printf("1. IBM Logo\n");
-    printf("2. Zero Demo\n");
-    printf("3. Particle\n");
-
-    printf("Enter the number of the ROM you want to load: ");
-    scanf("%d", &rom);
-}
 
 int main(void)
 {
     printf("Starting emulator...\n");
-    promptRoms();
+    chip8_PromptRoms();
     printf("Initializing Chip8...\n");
     chip8_InitSystem(&chip8);
     chip8_LoadProgram(&chip8, roms[rom - 1]);
     chip8_InitDisplay(&chip8);
 
-    const Uint32 TARGET_FRAME_TIME = 1000 / 60;
-    Uint32 lastTimerUpdate         = SDL_GetTicks();
 
     // Main loop
     while(true)
     {
         // Execute
         chip8_FetchDecodeExecute(&chip8);
-        chip8_RenderLoop();
+        chip8_Input(&chip8);
+        chip8_RenderLoop(&chip8);
+        chip8_Timer(&chip8);
 
-        Uint32 currentTime = SDL_GetTicks();
-        if(currentTime - lastTimerUpdate >= TARGET_FRAME_TIME)
-        {
-            if(chip8.delay_timer > 0)
-            {
-                chip8.delay_timer--;
-            }
-            if(chip8.sound_timer > 0)
-            {
-                if(chip8.sound_timer == 1)
-                {
-                    printf("BEEP!\n"); // TODO: Implement sound
-                }
-                chip8.sound_timer--;
-            }
-
-            lastTimerUpdate = currentTime;
-        }
         usleep(10000); // Slow down execution
     }
 
@@ -280,18 +251,19 @@ void chip8_FetchDecodeExecute(Chip8* chip8)
 
 void chip8_InitSystem(Chip8* chip8)
 {
-    chip8->memory      = (unsigned char*) malloc(4096);
-    chip8->V           = (unsigned char*) malloc(16);
-    chip8->stack       = (unsigned short*) malloc(16);
-    chip8->key         = (unsigned char*) malloc(16);
-    chip8->gfx         = (unsigned char*) malloc(64 * 32);
-    chip8->pc          = 0;
-    chip8->I           = 0;
-    chip8->sp          = 0;
-    chip8->delay_timer = 0;
-    chip8->sound_timer = 0;
-    chip8->opcode      = 0;
-    chip8->pc          = PROGRAM_RAM;
+    chip8->memory     = (unsigned char*) malloc(4096);
+    chip8->V          = (unsigned char*) malloc(16);
+    chip8->stack      = (unsigned short*) malloc(16);
+    chip8->key        = (unsigned char*) malloc(16);
+    chip8->gfx        = (unsigned char*) malloc(64 * 32);
+    chip8->pc         = 0;
+    chip8->I          = 0;
+    chip8->sp         = 0;
+    chip8->delayTimer = 0;
+    chip8->soundTimer = 0;
+    chip8->opcode     = 0;
+    chip8->pc         = PROGRAM_RAM;
+    lastTimerUpdate   = SDL_GetTicks();
 
     // Clear the display
     for(int i = 0; i < SCREEN_SIZE; i++)
@@ -383,6 +355,26 @@ void chip8_InitDisplay(Chip8* chip8)
 
 void chip8_RenderLoop(void)
 {
+    if(chip8.drawFlag)
+    {
+        uint32_t pixels[SCREEN_WIDTH * SCREEN_HEIGHT];
+        for(int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
+        {
+            pixels[i] = chip8.gfx[i] ? 0x0000FF00 : 0x00000000;
+        }
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_UpdateTexture(canvas, NULL, pixels, SCREEN_WIDTH * sizeof(uint32_t));
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, canvas, NULL, NULL);
+        SDL_RenderPresent(renderer);
+
+        chip8.drawFlag = 0;
+    }
+}
+
+void chip8_Input(void)
+{
     SDL_Event event;
     while(SDL_PollEvent(&event))
     {
@@ -448,21 +440,37 @@ void chip8_RenderLoop(void)
             }
         }
     }
+}
 
-    if(chip8.drawFlag)
+void chip8_PromptRoms(void)
+{
+    printf("Available ROMs:\n");
+    printf("1. IBM Logo\n");
+    printf("2. Zero Demo\n");
+    printf("3. Particle\n");
+
+    printf("Enter the number of the ROM you want to load: ");
+    scanf("%d", &rom);
+}
+
+void chip8_Timer(void)
+{
+    Uint32 currentTime = SDL_GetTicks();
+    if(currentTime - lastTimerUpdate >= TARGET_FRAME_TIME)
     {
-        uint32_t pixels[SCREEN_WIDTH * SCREEN_HEIGHT];
-        for(int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++)
+        if(chip8.delayTimer > 0)
         {
-            pixels[i] = chip8.gfx[i] ? 0x0000FF00 : 0x00000000;
+            chip8.delayTimer--;
+        }
+        if(chip8.soundTimer > 0)
+        {
+            if(chip8.soundTimer == 1)
+            {
+                printf("BEEP!\n"); // TODO: Implement sound
+            }
+            chip8.soundTimer--;
         }
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_UpdateTexture(canvas, NULL, pixels, SCREEN_WIDTH * sizeof(uint32_t));
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, canvas, NULL, NULL);
-        SDL_RenderPresent(renderer);
-
-        chip8.drawFlag = 0;
+        lastTimerUpdate = currentTime;
     }
 }

@@ -156,6 +156,9 @@
 			"path" : "roms/ibm.ch8"
 		},
 		{
+			"path" : "roms/hilo.ch8"
+		},
+		{
 			"path" : "SDL/CMakeLists.txt"
 		},
 		{
